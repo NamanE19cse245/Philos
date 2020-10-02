@@ -100,7 +100,7 @@ class Details extends React.Component {
           password: data.password,
         })
       );
-      fetch("http://5.181.217.131:5000", {
+      fetch("http://serverIP", {
         mode: "cors",
         method: "post",
         headers: { "Content-Type": "application/json" },
