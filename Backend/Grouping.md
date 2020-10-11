@@ -14,7 +14,7 @@ REPEAT
         FROM users1 GROUP BY grp_id) D 
     SET C.lat=D.lat, C.lng=D.lng,C.age=D.age,C.profession=D.profession WHERE C.grp_id=D.grp_id;
 UNTIL ROW_COUNT() = 0 END REPEAT;
-END//
+END //
 DELIMITER;
 
 <b> This code would be responsible to create the groups </b>
