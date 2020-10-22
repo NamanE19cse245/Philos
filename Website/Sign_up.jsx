@@ -57,68 +57,53 @@ class Details extends React.Component {
   handleChange = function (e) {
     var fname = document.getElementById("Fname").value;
     fname = fname.trim();
+    localStorage.fname = fname;
     var lname = document.getElementById("Lname").value;
     lname = lname.trim();
+    localStorage.lname = lname;
     var age = document.getElementById("age").value;
+    localStorage.age = age;
     var email = document.getElementById("email").value;
     email = email.trim();
+    localStorage.email = email;
+    let s = email.split(""); // split email to characters
+    for (let i in s) {
+      if (s[i] == "@") {
+        sessionStorage.true_email = "correct";
+      }
+    }
     var pno = document.getElementById("pno").value;
     pno = pno.trim();
+    localStorage.pno = pno;
     var about = document.getElementById("about").value;
+    localStorage.about = about;
     var pass = document.getElementById("pass").value;
+    localStorage.pass = pass;
     var rpass = document.getElementById("rpass").value;
-    if (rpass != pass || pass == "") {
-      alert("Password doesn't match");
-      document.getElementById("done").value = "False";
-    } else if (fname == "" || lname == "" || pno == "" || email == "") {
+    if (fname == "" || lname == "" || pno == "" || email == "") {
       alert("You can't leave the form incomplete");
       document.getElementById("done").value = "False";
+      var done = document.getElementById("done");
+      done.checked = false;
     } else if (age < 18) {
       alert(
         "Sorry! You do not meet our age criteria and therefore you are requested to close this site now!"
       );
       document.getElementById("done").value = "False";
+      var done = document.getElementById("done");
+      done.checked = false;
+    } else if (rpass != pass || pass == "") {
+      alert("Password doesn't match");
+      document.getElementById("done").value = "False";
+      var done = document.getElementById("done");
+      done.checked = false;
+    } else if (sessionStorage.true_email != "correct") {
+      alert("Incorrect Email Address!");
+      document.getElementById("done").value = "False";
+      var done = document.getElementById("done");
+      done.checked = false;
     } else {
-      var data = {
-        fname: fname,
-        lname: lname,
-        age: age,
-        email: email,
-        phone: pno,
-        about: about,
-        password: pass,
-      };
-
-      console.log(
-        JSON.stringify({
-          fname: data.fname,
-          lname: data.lname,
-          age: data.age,
-          email: data.email,
-          pno: data.phone,
-          about: data.about,
-          password: data.password,
-        })
-      );
-      fetch("http://serverIP", {
-        mode: "cors",
-        method: "post",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          fname: data.fname,
-          lname: data.lname,
-          age: data.age,
-          pno: data.phone,
-          email: data.email,
-          about: data.about,
-          password: data.password,
-        }),
-      })
-        .then((response) => response.json())
-        .then((datares) => {
-          window.alert(datares);
-          //Do anything else like Toast etc.
-        });
+      localStorage.previous = "incomplete"; //questions page requirement
     }
   };
   render() {
@@ -128,19 +113,23 @@ class Details extends React.Component {
           <form onSubmit={this.handleChange}>
             <fieldset
               style={{
-                backgroundColor: "#ceccca",
+                backgroundColor: "white",
                 alignContent: "center",
                 justifyContent: "center",
+                borderRadius: "20px",
               }}
             >
-              <legend>
+              <legend style={{ fontSize: "150%" }}>
                 <b>Personal Information:</b>
               </legend>
+              <label>
+                <b>First Name:</b>
+              </label>
+              <br></br>
               <input
                 id="Fname"
                 type="text"
                 required
-                placeholder="First Name"
                 style={{
                   width: "55%",
                   borderRadius: "5px",
@@ -148,20 +137,24 @@ class Details extends React.Component {
                 }}
               ></input>
               <br></br>
+              <label>
+                <b>Last Name:</b>
+              </label>
               <br></br>
               <input
                 id="Lname"
-                placeholder="Last Name"
                 type="text"
                 required
                 style={{ width: "55%", borderRadius: "5px", fontSize: "150%" }}
               ></input>
               <br></br>
+              <label>
+                <b>Age:</b>
+              </label>
               <br></br>
               <input
                 id="age"
                 type="number"
-                placeholder="Age"
                 required
                 style={{ width: "35%", borderRadius: "5px", fontSize: "150%" }}
               ></input>
@@ -169,11 +162,14 @@ class Details extends React.Component {
                 (You need to be 18 or above to use our services)
               </text>
               <br></br>
+              <label>
+                <b>Phone No:</b>
+              </label>
               <br></br>
               <input
                 id="pno"
                 type="phone"
-                placeholder="Phone no. (+91)"
+                placeholder="(+91)"
                 required
                 style={{ width: "55%", borderRadius: "5px", fontSize: "150%" }}
               ></input>
@@ -182,14 +178,19 @@ class Details extends React.Component {
             <br></br>
             <fieldset
               style={{
-                backgroundColor: "#ceccca",
+                backgroundColor: "white",
                 alignContent: "center",
                 justifyContent: "center",
+                borderRadius: "20px",
               }}
             >
-              <legend>
+              <legend style={{ fontSize: "150%" }}>
                 <b>Choose:</b>
               </legend>
+              <label>
+                <b>Email Adress:</b>
+              </label>
+              <br></br>
               <input
                 id="email"
                 type="email"
@@ -198,20 +199,24 @@ class Details extends React.Component {
                 style={{ width: "55%", borderRadius: "5px", fontSize: "110%" }}
               ></input>
               <br></br>
+              <label>
+                <b>Password:</b>
+              </label>
               <br></br>
               <input
                 id="pass"
                 type="password"
-                placeholder="Password"
                 required
                 style={{ width: "35%", borderRadius: "5px", fontSize: "110%" }}
               ></input>
               <br></br>
+              <label>
+                <b>Re-Enter Password:</b>
+              </label>
               <br></br>
               <input
                 id="rpass"
                 type="password"
-                placeholder="Re-Enter"
                 required
                 style={{ width: "35%", borderRadius: "5px", fontSize: "110%" }}
               ></input>
@@ -219,15 +224,19 @@ class Details extends React.Component {
 
             <br></br>
             <br></br>
-            <label>Tell us something about yourself: </label>
+            <label>
+              <b>Tell us something about yourself:</b>{" "}
+            </label>
             <br></br>
             <textarea
               id="about"
               rows="10"
               style={{
                 resize: "none",
-                width: "90%",
-                marginLeft: "5%",
+                width: "99%",
+                borderRadius: "20px",
+                alignContent: "center",
+                justifyContent: "center",
               }}
             ></textarea>
             <br></br>
@@ -238,9 +247,12 @@ class Details extends React.Component {
               id="done"
               value="True"
             ></input>
-            <label>
-              All Information provided by me is true to my knowlegde (once you
-              check the box, the form gets submitted)
+            <label style={{ fontStyle: "italic", fontSize: "120%" }}>
+              <b>
+                All Information provided by me is true to my knowlegde and I
+                accept all the T&C (
+                <u>once you check the box, the form gets submitted</u>)
+              </b>
             </label>
           </form>
         </React.Fragment>

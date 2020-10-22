@@ -5,15 +5,152 @@ class Questions extends React.Component {
     super(props);
     sessionStorage.previous = "hi";
   }
+   getLocation=()=> {
+        if (navigator.geolocation) {
+          navigator.geolocation.getCurrentPosition(this.getLatLon);
+        } 
+        else {
+          var x = document.getElementById("incomplete");
+          x.innerHTML = "Geolocation is not supported by this browser.";
+        }
+      }
+   getLatLon=(position)=> {
+        var latitude = position.coords.latitude;
+        var longitude = position.coords.longitude;
+        localStorage.latitude = latitude ;
+        localStorage.longitude = longitude ;
+      }
+  select_change = (e) => {
+    this.handleChange(e);
+   // var change = document.getElementById("done").value;
+    this.setState({ move_next: "change" });
+  };
+  handleChange = function (e) {
+    var q1 = document.getElementById("q1").value;
+    q1 = q1.trim();
+    var q2 = document.getElementById("q2").value;
+    q2 = q2.trim();
+    var q3 = document.getElementById("q3").value;
+    q3 = q3.trim();
+    var q4 = document.getElementById("q4").value;
+    q4 = q4.trim();
+    var profession = document.getElementById("p").value;
+    if(q1==""||q2==""||q3==""||q4==""){
+      document.getElementById("incomplete").innerHTML = "You can't leave the form incomplete. Kindly fill the form comletely to proceed to the next page."
+      localStorage.previous = "i";
+      this.setState({move_next:'change'})
+    }
+    else{
+      this.getLocation();
+      var data = {
+      fname: localStorage.fname,
+      lname: localStorage.lname,
+      age: localStorage.age,
+      email: localStorage.email,
+      phone: localStorage.pno,
+      about: localStorage.about,
+      password: localStorage.pass,
+      profession: profession,
+      lat:localStorage.latitude,
+      lng : localStorage.longitude,
+      q1: q1,
+      q2: q2,
+      q3: q3,
+      q4: q4,
+    };
+    console.log(data);
+      fetch("http://5.181.217.131:5000", {
+        mode: "cors",
+        method: "post",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          fname: data.fname,
+          lname: data.lname,
+          age: data.age,
+          pno: data.phone,
+          email: data.email,
+          about: data.about,
+          password: data.password,
+          lat: data.lat,
+          lng: data.lng,
+          q1 : data.q1 ,
+          q2 : data.q2 ,
+          q3 : data.q3 ,
+          q4 : data.q4,
+          profession : data.profession
+        }),
+      })
+        .then((response) => response.json())
+        .then((datares) => {
+          window.alert(datares);
+          //Do anything else like Toast etc.
+        });
+    localStorage.previous = "n";
+    }
+  };
   loadFile = (event) => {
     var image = document.getElementById("profile");
     image.src = URL.createObjectURL(event.target.files[0]);
   };
   render() {
-    if (sessionStorage.previous == "i") {
+    if (localStorage.previous == "n") {
       return (
         <React.Fragment>
-          <p>didnt</p>
+          <br></br>
+          <br></br>
+          <section
+            style={{
+              backgroundColor: "white",
+              marginLeft: "15%",
+              marginRight: "15%",
+              padding: "12px 20px",
+              borderRadius: "20px",
+              alignContent: "center",
+              justifyContent: "center",
+            }}
+          >
+            <p
+              style={{
+                justifyContent: "center",
+                alignContent: "center",
+                marginLeft: "8%",
+                fontSize: "150%",
+              }}
+            >
+              <b>Thank You for creating your Phios account !</b>
+            </p>
+            <p
+              style={{
+                justifyContent: "center",
+                alignContent: "center",
+                marginLeft: "8%",
+                fontSize: "120%",
+              }}
+            >
+              Your data has now been <u>saved</u> and you will be <u>redirected</u> to the
+              home page. Your are requested to not-violate our Terms & Conditions and must go through our Privacy Policy.
+            </p>
+            <br></br>
+            <br></br>
+            <Link to="/" style={{ textDecoration: "none" }}>
+              <button
+                type="button"
+                style={{
+                  textAlign: "center",
+                  alignContent: "center",
+                  marginLeft: "auto",
+                  marginRight: "auto",
+                  display: "block",
+                  borderRadius: "20px",
+                  width: "30%",
+                  backgroundColor: "#88bdbc",
+                  fontSize: "150%",
+                }}
+              >
+                Okay
+              </button>
+            </Link>
+          </section>
         </React.Fragment>
       );
     } else {
@@ -63,11 +200,11 @@ class Questions extends React.Component {
               }}
             />
             <br></br>
-            <form>
+            <form /*onSubmit={this.select_change}*/>
               <Ques></Ques>
               <br></br>
               <button
-                type="submit"
+                type="button"
                 style={{
                   textAlign: "center",
                   alignContent: "center",
@@ -77,6 +214,7 @@ class Questions extends React.Component {
                   backgroundColor: " #88bdbc",
                   fontSize: "150%",
                 }}
+                onClick={this.select_change}
               >
                 Submit
               </button>
@@ -120,6 +258,7 @@ class Ques extends React.Component {
             alignContent: "center",
             marginLeft: "5%",
           }}
+          id="q1"
         ></textarea>
         <h3
           style={{ textAlign: "left", marginLeft: "50px", marginRight: "50px" }}
@@ -135,6 +274,7 @@ class Ques extends React.Component {
             alignContent: "center",
             marginLeft: "5%",
           }}
+          id="q2"
         ></textarea>
         <h3
           style={{ textAlign: "left", marginLeft: "50px", marginRight: "50px" }}
@@ -150,6 +290,7 @@ class Ques extends React.Component {
             alignContent: "center",
             marginLeft: "5%",
           }}
+          id="q3"
         ></textarea>
         <h3
           style={{ textAlign: "left", marginLeft: "50px", marginRight: "50px" }}
@@ -165,8 +306,10 @@ class Ques extends React.Component {
             alignContent: "center",
             marginLeft: "5%",
           }}
+          id="q4"
         ></textarea>
         <DropDown></DropDown>
+        <h4 id='incomplete' style={{color:'red',marginLeft:'50px',marginRight:'50px'}}></h4>
       </div>
     );
   }
@@ -184,6 +327,8 @@ class DropDown extends React.Component {
   select_profession = (e) => {
     var change = document.getElementById("student").value;
     this.setState({ jobs: change });
+    var input = document.getElementById("student");
+    input.checked = false;
   };
   render() {
     if (this.state.jobs != "STD") {
@@ -192,9 +337,13 @@ class DropDown extends React.Component {
           <h4 style={{ textAlign: "left", marginLeft: "50px" }}>
             Select you Profession:
           </h4>
-          <select style={{ alignContent: "center", marginLeft: "50px" }}>
-            <option>Engineer</option>
-            <option>Medical Science</option>
+          <select
+            id="p"
+            style={{ alignContent: "center", marginLeft: "50px" }}
+            onChange={this.urp}
+          >
+            <option value="0">Engineer</option>
+            <option value="1">Medical Science</option>
           </select>
           <br></br>
           <input
@@ -214,8 +363,12 @@ class DropDown extends React.Component {
           <h4 style={{ textAlign: "left", marginLeft: "50px" }}>
             Select your field of study:
           </h4>
-          <select style={{ alignContent: "center", marginLeft: "50px" }}>
-            <option>Now</option>
+          <select
+            id="p"
+            style={{ alignContent: "center", marginLeft: "50px" }}
+          >
+            <option value="2">Commerce</option>
+            <option value="3">Music</option>
           </select>
           <br></br>
           <input
