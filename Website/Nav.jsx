@@ -1,6 +1,9 @@
 import React, { Component, StyleSheet } from "react";
 import { Link } from "react-router-dom";
 class Nav extends React.Component {
+  meet = () => {
+    alert("Feature Coming Soon!");
+  };
   render() {
     const styles = {
       display: "inline",
@@ -32,19 +35,23 @@ class Nav extends React.Component {
             <li style={space_style}> </li>
             <li style={styles}>|</li>
             <li style={space_style}> </li>
-            <li style={styles} class="nav">
-              Profile
-            </li>
+            <Link to="/profile" style={{ textDecoration: "none" }}>
+              <li style={styles} class="nav">
+                Profile
+              </li>
+            </Link>
             <li style={space_style}> </li>
             <li style={styles}>|</li>
             <li style={space_style}> </li>
-            <li style={styles} class="nav">
-              Chat
-            </li>
+            <Link to="/chat" style={{ textDecoration: "none" }}>
+              <li style={styles} class="nav">
+                Chat
+              </li>
+            </Link>
             <li style={space_style}> </li>
             <li style={styles}>|</li>
             <li style={space_style}> </li>
-            <li style={styles} class="nav">
+            <li style={styles} class="nav" onClick={this.meet}>
               Meet
             </li>
             <li style={space_style}> </li>

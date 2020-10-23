@@ -1,63 +1,103 @@
 import React, { Component, StyleSheet } from "react";
 import { Link } from "react-router-dom";
 import Nav from "./Nav";
+import Profile from "./Profile";
 class Home extends React.Component {
   render() {
-    return (
-      <React.Fragment>
-        <Nav></Nav>
-        <br></br>
-        <br></br>
-        <br></br>
-        <section
-          style={{
-            backgroundColor: "white",
-            alignContent: "center",
-            padding: "12px 20px",
-            marginRight: "15%",
-            marginLeft: "15%",
-            borderRadius: "12px",
-            alignItems: "center",
-          }}
-        >
-          <img
-            src="https://cdn.pixabay.com/photo/2013/04/01/21/31/parking-99212_640.png"
-            alt="logo"
-            width="100px"
-            height="100px"
-            style={{
-              marginLeft: "auto",
-              marginRight: "auto",
-              display: "block",
-            }}
-          />
+    if(localStorage.login_response=="Successfully logged-in!!!"){
+      return(
+        <React.Fragment>
+          <Profile/>
+        </React.Fragment>
+      );
+
+    }
+    else{
+      return (
+        <React.Fragment>
+          <Nav></Nav>
           <br></br>
-          <Form></Form>
-          <Link to="/sign_up" style={{ textDecoration: "none" }}>
-            <button
-              type="button"
+          <br></br>
+          <br></br>
+          <section
+            style={{
+              backgroundColor: "white",
+              alignContent: "center",
+              padding: "12px 20px",
+              marginRight: "15%",
+              marginLeft: "15%",
+              borderRadius: "12px",
+              alignItems: "center",
+            }}
+          >
+            <img
+              src={require("./Philos_logo.jpg")}
+              alt="logo"
+              width="100px"
+              height="100px"
               style={{
-                textAlign: "center",
-                alignContent: "center",
                 marginLeft: "auto",
                 marginRight: "auto",
                 display: "block",
-                borderRadius: "7px",
-                backgroundColor: "#2c3531",
-                width: "30%",
-                color: "white",
-                fontSize: "150%",
               }}
-            >
-              New Here? Sign-up
-            </button>
-          </Link>
-        </section>
-      </React.Fragment>
-    );
+            />
+            <br></br>
+            <Form></Form>
+            <Link to="/sign_up" style={{ textDecoration: "none" }}>
+              <button
+                type="button"
+                style={{
+                  textAlign: "center",
+                  alignContent: "center",
+                  marginLeft: "auto",
+                  marginRight: "auto",
+                  display: "block",
+                  borderRadius: "7px",
+                  backgroundColor: "#2c3531",
+                  width: "30%",
+                  color: "white",
+                  fontSize: "150%",
+                }}
+              >
+                New Here? Sign-up
+              </button>
+            </Link>
+          </section>
+        </React.Fragment>
+      );
+    }
   }
 }
 class Form extends React.Component {
+  constructor(props){
+    super(props);
+    this.state = {res:'false'};
+  }
+  log_in = (e) =>{
+    var email_Adress = document.getElementById("EA").value ;
+    var Pass_word = document.getElementById("PW").value ;
+    var cred = {    // cred = credentials to check values
+      email : email_Adress,
+      pass  : Pass_word
+    }
+    localStorage.details_user = cred.email ;
+    fetch("http://5.181.217.131:5000/login", {
+        mode: "cors",
+        method: "post",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          email : cred.email,
+          pass : cred.pass
+        }),
+      })
+        .then((response) => response.json())
+        .then((datares) => {
+          window.alert(datares);
+          localStorage.login_response = datares;
+          //Do anything else like Toast etc.
+        });
+        this.setState({res:'true'});
+  }
   render() {
     return (
       <form
@@ -72,12 +112,14 @@ class Form extends React.Component {
           required
           type="text"
           placeholder="Username"
+          id = "EA" // Email Address ID to fetch value
           style={{ borderRadius: "12px", width: "45%", fontSize: "150%" }}
         ></input>
         <br></br>
         <br></br>
         <input
           required
+          id = "PW" // Password ID to fetch value
           placeholder="Password"
           type="password"
           style={{ borderRadius: "12px", width: "45%", fontSize: "150%" }}
@@ -86,7 +128,7 @@ class Form extends React.Component {
         <br></br>
         <br></br>
         <button
-          type="submit"
+          type="button"
           style={{
             textAlign: "center",
             alignContent: "center",
@@ -97,6 +139,7 @@ class Form extends React.Component {
             backgroundColor: "#88bdbc",
             fontSize: "150%",
           }}
+          onClick={this.log_in}
         >
           Log In
         </button>
