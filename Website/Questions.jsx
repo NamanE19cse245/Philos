@@ -35,8 +35,8 @@ class Questions extends React.Component {
     var q4 = document.getElementById("q4").value;
     q4 = q4.trim();
     var profession = document.getElementById("p").value;
-    if(q1==""||q2==""||q3==""||q4==""){
-      document.getElementById("incomplete").innerHTML = "You can't leave the form incomplete. Kindly fill the form comletely to proceed to the next page."
+    if(q1==""||q2==""||q3==""||q4==""||localStorage.latitude===null||localStorage.longitude===null){
+      document.getElementById("incomplete").innerHTML = "You can't leave the form incomplete. Also make sure you have granted location access Kindly fill the form comletely to proceed to the next page."
       localStorage.previous = "i";
       this.setState({move_next:'change'})
     }
@@ -251,6 +251,7 @@ class Ques extends React.Component {
         </h3>
         <textarea
           required
+          maxLength = "100"
           style={{
             width: "90%",
             resize: "none",
@@ -267,6 +268,7 @@ class Ques extends React.Component {
         </h3>
         <textarea
           required
+          maxLength="100"
           style={{
             width: "90%",
             resize: "none",
@@ -283,6 +285,7 @@ class Ques extends React.Component {
         </h3>
         <textarea
           required
+          maxLength="100"
           style={{
             width: "90%",
             resize: "none",
@@ -299,6 +302,7 @@ class Ques extends React.Component {
         </h3>
         <textarea
           required
+          maxLength = "100"
           style={{
             width: "90%",
             resize: "none",

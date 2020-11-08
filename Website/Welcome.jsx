@@ -3,6 +3,10 @@ import { Link } from "react-router-dom";
 import Nav from "./Nav";
 import Profile from "./Profile";
 class Home extends React.Component {
+  constructor(props){
+    super(props);
+    this.state = {res:'false'};
+  }
   render() {
     if(localStorage.login_response=="Successfully logged-in!!!"){
       return(
@@ -61,6 +65,7 @@ class Home extends React.Component {
               >
                 New Here? Sign-up
               </button>
+              <p id="success" style={{color:'green',fontStyle:'italic',fontWeight:'bold'}}></p>
             </Link>
           </section>
         </React.Fragment>
@@ -94,9 +99,11 @@ class Form extends React.Component {
         .then((datares) => {
           window.alert(datares);
           localStorage.login_response = datares;
+          if(localStorage.login_response=="Successfully logged-in!!!"){
+          document.getElementById("success").innerHTML = "Logged-in Successfully! Click on the Home or Profile Tab to Continue";
+        }
           //Do anything else like Toast etc.
         });
-        this.setState({res:'true'});
   }
   render() {
     return (

@@ -73,7 +73,7 @@ class Profile extends Component {
             }}
           >
             <br></br>
-            <button style={{marginLeft:'80%',backgroundColor:'#2c3531',color:'white',fontSize:'150%'}}
+            <button style={{marginLeft:'70%',backgroundColor:'#2c3531',color:'white',fontSize:'150%',borderRadius:'20px'}}
             onClick={this.log_out}
             >
               Log-Out
@@ -122,30 +122,29 @@ class User_details extends Component {
         <br></br>
         <label style={titles}>About:</label>
         <br></br>
-        <label id="res.about" style={{fontStyle:'italic',marginLeft:'23%'}}></label>
+        <label id="res.about" style={{fontStyle:'italic',marginLeft:'10%'}}></label>
         <br></br>
         <br></br>
-        <label style={titles}>Q1: What motivates you to get out of bed each morning?</label>
-        <p style={{marginLeft:'23%'}} id="res.q1"></p>
+        <section >
+          <p style={titles}>Q1: What motivates you to get out of bed each morning?</p>
+        <p style={{marginLeft:'10%'}} id="res.q1"></p>
+        <p style={titles}>Q2: What is a cause you are really passionate about?</p>
+        <p style={{marginLeft:'10%'}} id="res.q2"></p>
+        <p style={titles}>Q3: What is your favourite kind of vacation?</p>
+        <p style={{marginLeft:'10%'}} id="res.q3"></p>
+        <p style={titles}>Q4: What is your favourite embarassing story?</p>
+        <p style={{marginLeft:'10%'}} id="res.q4"></p>
         <br></br>
-        <br></br>
-        <label style={titles}>Q2: What is a cause you are really passionate about?</label>
-        <p style={{marginLeft:'23%'}} id="res.q2"></p>
-        <br></br>
-        <br></br>
-        <label style={titles}>Q3: What is your favourite kind of vacation?</label>
-        <p style={{marginLeft:'23%'}} id="res.q3"></p>
-        <br></br>
-        <br></br>
-        <label style={titles}>Q4: What is your favourite embarassing story?</label>
-        <p style={{marginLeft:'23%'}} id="res.q4"></p>
+        </section>
       </React.Fragment>
     );
   }
 }
 const titles = {
-  marginLeft: "23%",
+  marginLeft: "10%",
   marginRight:"auto",
-  fontSize:'150%'
+  fontSize:'150%',
+  fontStyle:"italic",
+  fontWeight:'bold'
 };
 export default Profile;

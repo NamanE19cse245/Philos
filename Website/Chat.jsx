@@ -4,6 +4,26 @@ import { Link, Redirect, withRouter } from "react-router-dom";
 import Not_logged from "./Not_logged";
 
 class Chat extends Component {
+  constructor(props){
+    super(props);
+    var d = new Date();
+    if(localStorage.login_response=="Successfully logged-in!!!"){
+      fetch("http://5.181.217.131:5000/chatinit", {
+        mode: "cors",
+        method: "post",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          email : localStorage.details_user
+        }),
+      })
+        .then((response) => response.json())
+        .then((datares) => {
+          localStorage.chat_g = datares.grp_id;
+          localStorage.chat_c = datares.created;
+          //Do anything else like Toast etc.
+        });
+    }
+  }
   render() {
     if(localStorage.login_response!="Successfully logged-in!!!"){
       return(
@@ -136,7 +156,48 @@ class Display_list extends Component {
 class Chat_box extends Component {
   send = (e) => {
     let msg = document.getElementById("msg").value;
-    alert(msg);
+    var d = new Date();
+    var date = d.getDate();
+    var month = d.getMonth();
+    var year = d.getFullYear();
+    var hrs = d.getHours();
+    var mins = d.getMinutes();
+    var sec = d.getSeconds();
+    month +=1;
+    if (date<10){
+      date = "0"+date;
+    }
+    if(month<10){
+      month = "0"+month;
+    }
+    if(hrs<10){
+      hrs = "0"+hrs;
+    }
+    if(mins<10){
+      mins = "0"+mins;
+    }
+    if(sec<10){
+      sec = "0"+sec;
+    }
+    if(localStorage.login_response=="Successfully logged-in!!!"){
+      fetch("http://5.181.217.131:5000/pushchat", {
+        mode: "cors",
+        method: "post",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          email : localStorage.details_user,
+          message:msg,
+          grp_id:localStorage.chat_g,
+          created: localStorage.chat_c , 
+          dt : year+"-"+month+"-"+date+" "+hrs+":"+mins+":"+sec
+        }),
+      })
+        .then((response) => response.json())
+        .then((datares) => {
+          console.log(datares);
+          //Do anything else like Toast etc.
+        });
+    }
     document.getElementById("msg").value = "";
   };
   render() {
