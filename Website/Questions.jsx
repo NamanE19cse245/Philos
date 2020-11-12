@@ -156,7 +156,7 @@ class Questions extends React.Component {
     } else {
       return (
         <React.Fragment>
-          <h1 style={{ marginLeft: "10%" }}>
+          <h1 style={{ marginLeft: "10%",color:'#FFCF43'}}>
             Select a Profile Picture and answer some basic Questions about
             yourself:
           </h1>

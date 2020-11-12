@@ -2,6 +2,7 @@ import React, { Component, StyleSheet } from "react";
 import Nav from "./Nav";
 import { Link, Redirect, withRouter } from "react-router-dom";
 import Not_logged from "./Not_logged";
+import {Alert} from 'react-bootstrap';
 
 class Chat extends Component {
   constructor(props){
@@ -28,6 +29,7 @@ class Chat extends Component {
     if(localStorage.login_response!="Successfully logged-in!!!"){
       return(
         <React.Fragment>
+          <Nav></Nav>
         <br></br>
         <br></br>
         <br></br>
@@ -43,7 +45,7 @@ class Chat extends Component {
         }}
         >
         <Not_logged/>
-        <h3 style={{textAlign:'center'}}>To chat with other members, you need to log-in</h3>
+        <Alert variant="danger" style={{fontSize:'150%'}}>To chat with other users, you need to <Link to='/' style={{color:'red'}}>Log-In</Link></Alert>
         </section>
       </React.Fragment>
       );

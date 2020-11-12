@@ -5,7 +5,6 @@ class Not_logged extends Component{
     render(){
         return(
             <React.Fragment>
-                <Nav/>
                 <br></br>
                 <br></br>
                 <br></br>

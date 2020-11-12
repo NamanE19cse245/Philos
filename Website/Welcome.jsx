@@ -1,11 +1,20 @@
 import React, { Component, StyleSheet } from "react";
 import { Link } from "react-router-dom";
 import Nav from "./Nav";
+import {Alert} from 'react-bootstrap'
 import Profile from "./Profile";
 class Home extends React.Component {
   constructor(props){
     super(props);
     this.state = {res:'false'};
+  }
+  change_opacity = (event) =>{
+    var welcome = document.getElementById("welcome");
+    welcome.style.opacity = 0.85;
+  }
+  original_opacity = (event) =>{
+    var welcome = document.getElementById("welcome");
+    welcome.style.opacity = 0.7;
   }
   render() {
     if(localStorage.login_response=="Successfully logged-in!!!"){
@@ -24,6 +33,7 @@ class Home extends React.Component {
           <br></br>
           <br></br>
           <section
+          id = "welcome"
             style={{
               backgroundColor: "white",
               alignContent: "center",
@@ -32,7 +42,10 @@ class Home extends React.Component {
               marginLeft: "15%",
               borderRadius: "12px",
               alignItems: "center",
+              opacity:'0.7'
             }}
+            onMouseEnter={this.change_opacity}
+            onMouseLeave={this.original_opacity}
           >
             <img
               src={require("./Philos_logo.jpg")}
@@ -65,7 +78,8 @@ class Home extends React.Component {
               >
                 New Here? Sign-up
               </button>
-              <p id="success" style={{color:'green',fontStyle:'italic',fontWeight:'bold'}}></p>
+              <br></br>
+              <Alert id="success" variant="light"style={{color:'green',fontStyle:'italic',fontWeight:'bold',borderRadius:'20px'}}></Alert>
             </Link>
           </section>
         </React.Fragment>
@@ -97,10 +111,21 @@ class Form extends React.Component {
       })
         .then((response) => response.json())
         .then((datares) => {
-          window.alert(datares);
+         // window.alert(datares);
           localStorage.login_response = datares;
           if(localStorage.login_response=="Successfully logged-in!!!"){
           document.getElementById("success").innerHTML = "Logged-in Successfully! Click on the Home or Profile Tab to Continue";
+          var s = document.getElementById("success");
+          s.style.color = "green";
+          s.variant = "success";
+          s.style.backgroundColor = "#4fc978";
+         // document.getElementById("success").
+        }
+        else{
+          document.getElementById("success").innerHTML = localStorage.login_response;
+          var s = document.getElementById("success");
+          s.style.color = "red";
+          s.style.backgroundColor = "#fa8072";
         }
           //Do anything else like Toast etc.
         });
