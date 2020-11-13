@@ -85,13 +85,40 @@ class Questions extends React.Component {
           window.alert(datares);
           //Do anything else like Toast etc.
         });
-    localStorage.previous = "n";
-    }
+    localStorage.previous = "n";}
   };
   loadFile = (event) => {
     var image = document.getElementById("profile");
     image.src = URL.createObjectURL(event.target.files[0]);
+      const fd = new FormData();
+      fd.append('myFile',event.target.files[0],localStorage.email+".jpg");
+      fetch('http://5.181.217.131:5000/saveImage',{
+        method:'POST',
+        body:fd
+      })
+      .then(res => res.json())
+      .then(json => console.log(json))
+      .catch(err => console.error(err));
   };
+  // componentDidMount(){
+  //    const input = document.getElementById("prof_pic");
+  //   input.addEventListener('change',()=>{
+  //     uploadFile(input.files[0]);
+  //     console.log(URL.createObjectURL(input.files[0]));
+  //   });
+  //   const uploadFile = (file) =>{
+  //     console.log(URL.createObjectURL(file));
+  //     const fd = new FormData();
+  //     fd.append('avatar',input.files[0],'prof');
+  //     fetch('http://5.181.217.131:5000/saveImage',{
+  //       method:'POST',
+  //       body:fd
+  //     })
+  //     .then(res => res.json())
+  //     .then(json => console.log(json))
+  //     .catch(err => console.error(err));
+  //   }
+  // }
   render() {
     if (localStorage.previous == "n") {
       return (
@@ -187,6 +214,7 @@ class Questions extends React.Component {
             ></img>
             <br></br>
             <input
+              id = "prof_pic"
               type="file"
               onChange={this.loadFile}
               name="myImage"
