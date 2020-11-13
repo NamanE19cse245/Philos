@@ -25,7 +25,7 @@ class Sign_up extends React.Component {
 							variant="danger"
 							style={{
 								display: 'block',
-								width: '20%',
+								width: '30%',
 								fontSize: '150%',
 								alignContent: 'center',
 								marginLeft: 'auto',
