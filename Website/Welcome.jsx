@@ -119,7 +119,9 @@ class Form extends React.Component {
           s.style.color = "green";
           s.variant = "success";
           s.style.backgroundColor = "#4fc978";
+          localStorage.loggedin_user = document.getElementById("EA").value ;
          // document.getElementById("success").
+         this.update_cred();
         }
         else{
           document.getElementById("success").innerHTML = localStorage.login_response;
@@ -129,6 +131,25 @@ class Form extends React.Component {
         }
           //Do anything else like Toast etc.
         });
+  }
+  update_cred(){
+    if (localStorage.login_response == 'Successfully logged-in!!!') {
+			fetch('http://5.181.217.131:5000/chatinit', {
+				mode: 'cors',
+				method: 'post',
+				headers: { 'Content-Type': 'application/json' },
+				body: JSON.stringify({
+					email: localStorage.loggedin_user
+				})
+			})
+				.then((response) => response.json())
+				.then((datares) => {
+					this.setState({grp:datares.grp_id});
+					this.setState({created:datares.created});
+					localStorage.chat_g = datares.grp_id;
+					localStorage.chat_c = datares.created;
+				});
+		}
   }
   render() {
     return (
